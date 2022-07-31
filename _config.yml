@@ -16,7 +16,7 @@ lang: en
 prefer_datetime_locale:
 
 # Change to your timezone › http://www.timezoneconverter.com/cgi-bin/findzone/findzone
-timezone:
+timezone: Europe/Paris
 
 # jekyll-seo-tag settings › https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md
 # ↓ --------------------------
@@ -34,8 +34,8 @@ url: 'https://soc1ety.github.io'
 github:
   username: soc1ety             # change to your github username
 
-  # twitter:
-  # username: twitter_username            # change to your twitter username
+#twitter:
+#username: twitter_username            # change to your twitter username
 
 social:
   # Change to your full name.
@@ -45,7 +45,7 @@ social:
   links:
     # The first element serves as the copyright owner's link
     # - https://twitter.com/username      # change to your twitter homepage
-    - https://github.com/soc1ety       # change to your github homepage
+      - https://github.com/soc1ety       # change to your github homepage
     # Uncomment below to add more social links
     # - https://www.facebook.com/username
     # - https://www.linkedin.com/in/username
