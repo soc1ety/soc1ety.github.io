@@ -11,7 +11,7 @@ tags: [linux, htb, writeups, ctf]
 
 Fast review of the machine : 
 
-RedPanda was an easy-rated Linux HTB box made my Woodenk.
+RedPanda was an easy-rated Linux HTB box made by Woodenk.
 During our initial nmap scan we discover the port `8080` that hosts the main application of this box, we discover a field input and manage to exploit it using SSTI.
 Having remote code execution we can either get the user flag directly or get a reverse shell using a msfvenom payload.
 Finally, we will be able to escalate our privilege using XXE to leak root's SSH private key.
