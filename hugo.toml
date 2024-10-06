@@ -1,4 +1,31 @@
-baseURL = 'https://example.org/'
+baseURL = 'https://soc1ety.github.io'
 languageCode = 'en-us'
-title = 'My New Hugo Site'
+title = 'cool blog'
 theme = 'archie'
+paginate = 4
+
+
+[params]
+
+mode = "toggle"
+useCDN = "true"
+
+[[params.social]]
+name = "GitHub"
+icon = "github"
+url = "https://github.com/soc1ety"
+
+[[menu.main]]
+name = "home"
+url = "/"
+weight = 1
+
+[[menu.main]]
+name = "posts"
+url = "/posts"
+weight = 2
+
+[[menu.main]]
+name = "about"
+url = "/about"
+weight = 3
