@@ -7,7 +7,7 @@ paginate = 4
 
 [params]
 
-mode = "toggle"
+mode = "dark"
 useCDN = "true"
 
 [[params.social]]
