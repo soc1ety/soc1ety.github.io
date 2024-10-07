@@ -6,14 +6,14 @@
     <description>Recent content on cool blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 06 Oct 2024 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 07 Oct 2024 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>first post</title>
-      <link>http://localhost:1313/posts/test/</link>
-      <pubDate>Sun, 06 Oct 2024 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/test/</guid>
-      <description></description>
+      <title>First malware : Windows Remote Thread Injection</title>
+      <link>http://localhost:1313/posts/remote-process-injection/</link>
+      <pubDate>Mon, 07 Oct 2024 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/remote-process-injection/</guid>
+      <description>What ?? Malware ?? No more pentesting ?? (Boring backstory) Well, kind of (yes). I&amp;rsquo;ll keep this brief. I started my cybersecurity journey back in 2020 with penetration testing, web application security, and participating in various Capture the Flag (CTF) challenges, mainly on HackTheBox. After a while, though, I found myself getting a bit bored. I was running out of ideas, and working on box after box made me realize it was time to explore something new and exciting.</description>
     </item>
     <item>
       <title></title>

