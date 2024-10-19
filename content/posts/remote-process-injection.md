@@ -35,7 +35,7 @@ As shown below, this is what he came up with :
 Everything is already perfectly explained (thanks again <3) but the goal here is to write a small program that will execute a shellcode (a payload designed to execute code on a target host) into a remote process which will return a reverse shell on my local machine.   
 To accomplish this, we are going to use the C programming language.  
 
-We will talk a bit about this later but the shellcode will be encrypted using *Single-byte XOR encryption* which is a very basic AV evasion method. 
+We will talk a bit about this later but the shellcode will be encrypted using *Single-byte XOR* encryption which is a very basic AV evasion method. 
 
 --- 
 # OpenProcess, VirtualAllocEx, WriteProcessMemory and CreateRemoteThread APIs 
