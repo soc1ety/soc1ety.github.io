@@ -4,7 +4,7 @@
     <title>cool blog</title>
     <link>http://localhost:1313/</link>
     <description>Recent content on cool blog</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 19 Oct 2024 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
@@ -13,14 +13,14 @@
       <link>http://localhost:1313/about/</link>
       <pubDate>Sat, 19 Oct 2024 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/about/</guid>
-      <description>very interesting biography coming up i promise</description>
+      <description>&lt;p&gt;very interesting biography coming up i promise&lt;/p&gt;</description>
     </item>
     <item>
       <title>First malware : Windows Remote Thread Injection</title>
       <link>http://localhost:1313/posts/remote-process-injection/</link>
       <pubDate>Mon, 07 Oct 2024 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/posts/remote-process-injection/</guid>
-      <description>What ?? Malware ?? No more pentesting ?? (Boring backstory) Well, kind of (yes). I&amp;rsquo;ll keep this brief. I started my cybersecurity journey back in 2020 with penetration testing, web application security, and participating in various Capture the Flag (CTF) challenges, mainly on HackTheBox. After a while, though, I found myself getting a bit bored. I was running out of ideas, and working on box after box made me realize it was time to explore something new and exciting.</description>
+      <description>&lt;hr&gt;&#xA;&lt;h1 id=&#34;what--malware--no-more-pentesting--boring-backstory&#34;&gt;What ?? Malware ?? No more pentesting ?? (Boring backstory)&lt;/h1&gt;&#xA;&lt;p&gt;Well, sort of. Let me keep this brief. I began my cybersecurity journey in 2020, focusing on penetration testing, web application security, and participating in various Capture the Flag (CTF) challenges, primarily on HackTheBox. Over time, I found myself losing interest. Working on box after box felt repetitive, and I realized it was time to explore something new and more challenging.&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

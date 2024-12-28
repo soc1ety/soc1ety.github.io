@@ -4,15 +4,19 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>First malware : Windows Remote Thread Injection - cool blog</title><meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="Basic method to inject shellcode into a remote process" />
 	<meta property="og:image" content=""/>
-	<meta property="og:title" content="First malware : Windows Remote Thread Injection" />
-<meta property="og:description" content="Basic method to inject shellcode into a remote process" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="http://localhost:1313/posts/remote-process-injection/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2024-10-07T00:00:00+00:00" />
-<meta property="article:modified_time" content="2024-10-07T00:00:00+00:00" />
+	<meta property="og:url" content="http://localhost:1313/posts/remote-process-injection/">
+  <meta property="og:site_name" content="cool blog">
+  <meta property="og:title" content="First malware : Windows Remote Thread Injection">
+  <meta property="og:description" content="Basic method to inject shellcode into a remote process">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-10-07T00:00:00+00:00">
+    <meta property="article:modified_time" content="2024-10-07T00:00:00+00:00">
 
-<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="First malware : Windows Remote Thread Injection"/>
-<meta name="twitter:description" content="Basic method to inject shellcode into a remote process"/>
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="First malware : Windows Remote Thread Injection">
+  <meta name="twitter:description" content="Basic method to inject shellcode into a remote process">
 <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
 	<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@1,500&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Fira+Sans&display=swap" rel="stylesheet">
@@ -61,117 +65,109 @@
 		<section class="body">
 			<hr>
 <h1 id="what--malware--no-more-pentesting--boring-backstory">What ?? Malware ?? No more pentesting ?? (Boring backstory)</h1>
-<p>Well, kind of (yes). I&rsquo;ll keep this brief. I started my cybersecurity journey back in 2020 with penetration testing, web application security, and participating in various Capture the Flag (CTF) challenges, mainly on HackTheBox. After a while, though, I found myself getting a bit bored. I was running out of ideas, and working on box after box made me realize it was time to explore something new and exciting.</p>
-<p>That brings me to this new chapter in my career: Malware Development.</p>
-<p>To be honest, I&rsquo;ve always disliked programming (probably because I wasn&rsquo;t great at it, lol), but malware development has always fascinated me. So, I decided to give it a try and see where it takes me—whether I excel or fail, it’ll be a learning experience.</p>
-<p>This project wouldn&rsquo;t have been possible without the support of two friends (hi jord &amp; bakki &lt;3), so all the credit goes to them.
-From here on out, expect to see more malware development content, along with anything related to the amazing OS that is Windows.
-Without further ado, let’s dive into the topic of this blog post.</p>
+<p>Well, sort of. Let me keep this brief. I began my cybersecurity journey in 2020, focusing on penetration testing, web application security, and participating in various Capture the Flag (CTF) challenges, primarily on HackTheBox. Over time, I found myself losing interest. Working on box after box felt repetitive, and I realized it was time to explore something new and more challenging.</p>
+<p>This led me to the next chapter in my career: Malware Development.</p>
+<p>Admittedly, I’ve never been a fan of programming—probably because I wasn’t particularly skilled at it—but malware development has always intrigued me. I decided to give it a shot and see where it leads. Whether I succeed or stumble, I know it will be a valuable learning experience.</p>
+<p>I want to acknowledge the support of two friends, Jord and Bakki (kudos &lt;3), without whom this project wouldn’t have been possible—huge thanks to both of them. Going forward, you can expect more content focused on malware development and related topics, especially within the Windows ecosystem. Without further ado, let’s dive into the topic of this blog post.</p>
 <hr>
 <h1 id="fundamental-of-process-injection">Fundamental of Process Injection</h1>
-<p>Before anything else let&rsquo;s define the term we&rsquo;re going to focus on here, and MITRE has done a fantastic job for that so I&rsquo;ll quote them :</p>
-<p><em>Process injection is a method of executing arbitrary code in the address space of a separate live process. Running code in the context of another process may allow access to the process&rsquo;s memory, system/network resources, and possibly elevated privileges</em> from <a href="https://attack.mitre.org/techniques/T1055/">MITRE</a></p>
+<p>To understand this project, let’s first define the core concept: <strong>Process Injection</strong>.</p>
+<p>According to <a href="https://attack.mitre.org/techniques/T1055/">MITRE</a> : Process injection is a method of executing arbitrary code in the address space of a separate live process. This technique can grant access to the target process’s memory, system/network resources, and potentially elevated privileges.&rsquo; This definition perfectly encapsulates the technique used in this project</p>
 <hr>
 <h1 id="brief-description-of-the-project">Brief description of the project</h1>
-<p>As stated in the introduction, this project came to life thanks to a friend of mine as I&rsquo;ve asked him if he had some ideas about a baby project I could do to get my feet wet with Malware Development.</p>
-<p>As shown below, this is what he came up with :</p>
-<p><img src="/images/idea.png" alt="targets"><br>
-Everything is already perfectly explained (thanks again &lt;3) but the goal here is to write a small program that will execute a shellcode (a payload designed to execute code on a target host) into a remote process which will return a reverse shell on my local machine.<br>
-To accomplish this, we are going to use the C programming language.</p>
-<p>We will talk a bit about this later but the shellcode will be encrypted using <em>Single-byte XOR encryption</em> which is a very basic AV evasion method.</p>
+<p>As stated in the introduction, this project came to life thanks to a friend of mine as I’ve asked him if he had some ideas about a baby project I could do to get my feet wet with Malware Development.</p>
+<p>This project began as a suggestion from a friend when I was seeking a simple yet practical way to start learning malware development. The goal was to create a small program capable of executing shellcode into a remote process, ultimately establishing a reverse shell connection to my local machine. For this, I used the C programming language and implemented a basic AV evasion technique using single-byte XOR encryption.</p>
 <hr>
 <h1 id="openprocess-virtualallocex-writeprocessmemory-and-createremotethread-apis">OpenProcess, VirtualAllocEx, WriteProcessMemory and CreateRemoteThread APIs</h1>
 <p>Before diving into the code, let&rsquo;s talk a bit about the four functions we&rsquo;re going to use in this program.</p>
 <h2 id="openprocess">OpenProcess</h2>
 <p>The <strong>OpenProcess</strong> function is used to open an existing process (using its PID for example) for manipulation or observation by another process. The parameters it&rsquo;s taking are :</p>
 <table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>dwDesiredAccess</td>
-<td>Specifies the access rights that are requested for the process (read, write, synchronize, &hellip;). (We will use PROCESS_ALL_ACCESS)</td>
-</tr>
-<tr>
-<td>bInheritHandle</td>
-<td>Determines whether the new process handle can be inherited by child processes. If set to TRUE, the handle is inheritable; if set to FALSE, it is not.</td>
-</tr>
-<tr>
-<td>dwProcessId</td>
-<td>Specifies the unique identifier (PID) of the target process that we want to open.</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>dwDesiredAccess</td>
+          <td>Specifies the access rights that are requested for the process (read, write, synchronize, &hellip;). (We will use PROCESS_ALL_ACCESS)</td>
+      </tr>
+      <tr>
+          <td>bInheritHandle</td>
+          <td>Determines whether the new process handle can be inherited by child processes. If set to TRUE, the handle is inheritable; if set to FALSE, it is not.</td>
+      </tr>
+      <tr>
+          <td>dwProcessId</td>
+          <td>Specifies the unique identifier (PID) of the target process that we want to open.</td>
+      </tr>
+  </tbody>
 </table>
 <h2 id="virtualallocex">VirtualAllocEx</h2>
-<p><strong>VirtualAllocEx</strong> function is used to reserve, commit, or free a region of memory within the virtual address space of a specified process.<br>
-We will use this function to allocate memory for our shellcode.<br>
-(Note:  Here, <em>Ex</em> stands for <strong>Extended</strong>, which is an extended version of VirtualAlloc)</p>
+<p>The <strong>VirtualAllocEx</strong> function reserves, commits, or frees memory in the virtual address space of a specified process. For this project, it is used to allocate memory for the shellcode with read, write, and execute permissions (<code>PAGE_EXECUTE_READWRITE</code>).</p>
 <table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>hProcess</td>
-<td>Specifies a handle to the process in which the memory allocation is to occur.</td>
-</tr>
-<tr>
-<td>lpAddress</td>
-<td>Specifies the starting address of the region to allocate. If this parameter is set to NULL, the system determines by itself where to allocate the region.</td>
-</tr>
-<tr>
-<td>dwSize</td>
-<td>Specifies the size, in bytes, of the region to allocate. If lpAddress isn&rsquo;t set to NULL, this parameter must be zero.</td>
-</tr>
-<tr>
-<td>flAllocationType</td>
-<td>Specifies the type of memory allocation (MEM_COMMIT, MEM_RESERVE, or MEM_RESET).</td>
-</tr>
-<tr>
-<td>flProtect</td>
-<td>Specifies the memory protection for the region (PAGE_READONLY, PAGE_READWRITE, PAGE_EXECUTE, &hellip;).</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>hProcess</td>
+          <td>Specifies a handle to the process in which the memory allocation is to occur.</td>
+      </tr>
+      <tr>
+          <td>lpAddress</td>
+          <td>Specifies the starting address of the region to allocate. If this parameter is set to NULL, the system determines by itself where to allocate the region.</td>
+      </tr>
+      <tr>
+          <td>dwSize</td>
+          <td>Specifies the size, in bytes, of the region to allocate. If lpAddress isn&rsquo;t set to NULL, this parameter must be zero.</td>
+      </tr>
+      <tr>
+          <td>flAllocationType</td>
+          <td>Specifies the type of memory allocation (MEM_COMMIT, MEM_RESERVE, or MEM_RESET).</td>
+      </tr>
+      <tr>
+          <td>flProtect</td>
+          <td>Specifies the memory protection for the region (PAGE_READONLY, PAGE_READWRITE, PAGE_EXECUTE, &hellip;).</td>
+      </tr>
+  </tbody>
 </table>
 <p>For the <strong>dwSize</strong> parameter, we will specify the size of our shellcode, because that is exactly the size we want to allocate (<strong>sizeof</strong> directive in C).</p>
 <h2 id="writeprocessmemory">WriteProcessMemory</h2>
 <p><strong>WriteProcessMemory</strong> allows a process to write data to a specified region of memory in a target process.</p>
 <table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>hProcess</td>
-<td>Same as above</td>
-</tr>
-<tr>
-<td>lpBaseAddress</td>
-<td>Specifies the starting address of the region of memory to write to in the target process.</td>
-</tr>
-<tr>
-<td>lpBuffer</td>
-<td>Represents a pointer to the buffer that contains the data to be written to the specified process.</td>
-</tr>
-<tr>
-<td>nSize</td>
-<td>Number of bytes to write from the buffer.</td>
-</tr>
-<tr>
-<td>lpNumberOfBytesWritten</td>
-<td>Pointer to a variable that receives the number of bytes actually written (optional).</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>hProcess</td>
+          <td>Same as above</td>
+      </tr>
+      <tr>
+          <td>lpBaseAddress</td>
+          <td>Specifies the starting address of the region of memory to write to in the target process.</td>
+      </tr>
+      <tr>
+          <td>lpBuffer</td>
+          <td>Represents a pointer to the buffer that contains the data to be written to the specified process.</td>
+      </tr>
+      <tr>
+          <td>nSize</td>
+          <td>Number of bytes to write from the buffer.</td>
+      </tr>
+      <tr>
+          <td>lpNumberOfBytesWritten</td>
+          <td>Pointer to a variable that receives the number of bytes actually written (optional).</td>
+      </tr>
+  </tbody>
 </table>
 <p>In our case, <strong>lpBuffer</strong> will be a pointer to our shellcode, with a <strong>nSize</strong> also equal to our shellcode (also using <strong>sizeof</strong>).<br>
 Since we don&rsquo;t need <strong>lpNumberOfBytesWritten</strong>, this will be set to <em>NULL</em>.</p>
@@ -179,42 +175,42 @@ Since we don&rsquo;t need <strong>lpNumberOfBytesWritten</strong>, this will be 
 <p>This is where the magic happens since it&rsquo;s the link between our shellcode and the target process.<br>
 To put it simply ; It will create a thread in the virtual address place of our process, which will allow us to execute code on the system (thanks to the reverse shell mentioned at the beginning).</p>
 <table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>hProcess</td>
-<td>Same as above</td>
-</tr>
-<tr>
-<td>lpThreadAttributes</td>
-<td>Allows to specify security attributes for the new thread (we won&rsquo;t use that so it will be set to NULL).</td>
-</tr>
-<tr>
-<td>dwStackSize</td>
-<td>Specifies the initial size of the stack (in bytes) for the new thread. If set to 0, the system will use the default stack size.</td>
-</tr>
-<tr>
-<td>lpStartAddress</td>
-<td>Pointer that specifies where the new thread will start.</td>
-</tr>
-<tr>
-<td>lpParameter</td>
-<td>Pointer to a variable that will be passed to the thread function specified in lpStartAddress.</td>
-</tr>
-<tr>
-<td>dwCreationFlags</td>
-<td>Provides additional options for thread creation.</td>
-</tr>
-<tr>
-<td>lpThreadId</td>
-<td>Pointer to a variable that will receive the thread identifier of the newly created thread.</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>hProcess</td>
+          <td>Same as above</td>
+      </tr>
+      <tr>
+          <td>lpThreadAttributes</td>
+          <td>Allows to specify security attributes for the new thread (we won&rsquo;t use that so it will be set to NULL).</td>
+      </tr>
+      <tr>
+          <td>dwStackSize</td>
+          <td>Specifies the initial size of the stack (in bytes) for the new thread. If set to 0, the system will use the default stack size.</td>
+      </tr>
+      <tr>
+          <td>lpStartAddress</td>
+          <td>Pointer that specifies where the new thread will start.</td>
+      </tr>
+      <tr>
+          <td>lpParameter</td>
+          <td>Pointer to a variable that will be passed to the thread function specified in lpStartAddress.</td>
+      </tr>
+      <tr>
+          <td>dwCreationFlags</td>
+          <td>Provides additional options for thread creation.</td>
+      </tr>
+      <tr>
+          <td>lpThreadId</td>
+          <td>Pointer to a variable that will receive the thread identifier of the newly created thread.</td>
+      </tr>
+  </tbody>
 </table>
 <p>In our case, <strong>lpThreadAttributes</strong> <strong>lpParameter</strong> and <strong>lpThreadId</strong> will be set to NULL because we don&rsquo;t need that.<br>
 For <strong>lpStartAddress</strong> we will use <strong>LPTHREAD_START_ROUTINE</strong> which indicates the beginning of our shellcode.</p>
@@ -226,8 +222,7 @@ For <strong>lpStartAddress</strong> we will use <strong>LPTHREAD_START_ROUTINE</
 </span></span><span style="display:flex;"><span>        FALSE,
 </span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">2468</span>
 </span></span><span style="display:flex;"><span>);
-</span></span></code></pre></div><p>First, we create our handle to our process, here I chose <em>notepad.exe</em> denoted by a PID of 2468, you can choose anything you want (a cmd, another random application, &hellip;).
-<strong>PROCESS_ALL_ACCESS</strong> gives all possible access rights to our object.</p>
+</span></span></code></pre></div><p>In this step, we use OpenProcess to open a handle to the target process. For demonstration, I used <strong>notepad.exe</strong> with a PID of <code>2468</code>. However, this could be any process, such as cmd.exe or another application.</p>
 <h2 id="2-basic-av-evasion-more-on-this-later">2. Basic AV Evasion (more on this later)</h2>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">char</span> key <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;S&#39;</span>;
 </span></span><span style="display:flex;"><span>
@@ -235,7 +230,7 @@ For <strong>lpStartAddress</strong> we will use <strong>LPTHREAD_START_ROUTINE</
 </span></span><span style="display:flex;"><span>    {
 </span></span><span style="display:flex;"><span>		shellcode[i] <span style="color:#f92672">^=</span> key;
 </span></span><span style="display:flex;"><span>    }
-</span></span></code></pre></div><p>We will use a very basic antivirus evasion method here ; encrypting our shellcode using XOR.</p>
+</span></span></code></pre></div><p>To evade antivirus detection, I implemented single-byte XOR encryption, a straightforward technique where each byte of the shellcode is XORed with a single key (&lsquo;S&rsquo; in this case). This obfuscates the shellcode, making it less recognizable to static analysis tools or antivirus software. The encrypted shellcode is then decrypted at runtime before execution.</p>
 <h2 id="3-memory-allocation-for-our-shellcode">3. Memory allocation for our shellcode</h2>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>    LPVOID lpShellcode <span style="color:#f92672">=</span> <span style="color:#a6e22e">VirtualAllocEx</span>(
 </span></span><span style="display:flex;"><span>        hProc,
@@ -352,9 +347,8 @@ Here is a before &amp; after encryption :</p>
 <p>The difference is not that big but as we can see we lowered our score by 5, demonstrating clearly that even a very basic and well-known evasion method works.</p>
 <hr>
 <h1 id="conclusion">Conclusion</h1>
-<p>I aimed to demonstrate a simple yet powerful program that enabled us to achieve code execution on a target machine. I wrote this code in about 30 minutes while relearning C from scratch, since I had forgotten most of what I knew about this lovely language. So, please don&rsquo;t judge too harshly if my code has made you want to give up programming for good.</p>
-<p>I hope you enjoyed following along as much as I enjoyed creating this. I&rsquo;m excited to dive into even more fun projects in the wonderful piece of software that is Windows.</p>
-<p>See you soon, and take care !</p>
+<p>This project demonstrated a simple yet effective method for achieving remote code execution on a target machine. While the implementation is basic, it highlights the core concepts of process injection and AV evasion. Developing this program also served as a hands-on way to relearn C programming. I look forward to exploring more advanced techniques in future projects.</p>
+<p>See you soon and take care !</p>
 <hr>
 <h1 id="sources">Sources</h1>
 <ul>

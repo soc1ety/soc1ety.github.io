@@ -7,35 +7,27 @@ description: "Basic method to inject shellcode into a remote process"
 ---
 # What ?? Malware ?? No more pentesting ?? (Boring backstory)
 
-Well, kind of (yes). I'll keep this brief. I started my cybersecurity journey back in 2020 with penetration testing, web application security, and participating in various Capture the Flag (CTF) challenges, mainly on HackTheBox. After a while, though, I found myself getting a bit bored. I was running out of ideas, and working on box after box made me realize it was time to explore something new and exciting.
+Well, sort of. Let me keep this brief. I began my cybersecurity journey in 2020, focusing on penetration testing, web application security, and participating in various Capture the Flag (CTF) challenges, primarily on HackTheBox. Over time, I found myself losing interest. Working on box after box felt repetitive, and I realized it was time to explore something new and more challenging.
 
-That brings me to this new chapter in my career: Malware Development.
+This led me to the next chapter in my career: Malware Development.
 
-To be honest, I've always disliked programming (probably because I wasn't great at it, lol), but malware development has always fascinated me. So, I decided to give it a try and see where it takes me—whether I excel or fail, it’ll be a learning experience.
+Admittedly, I’ve never been a fan of programming—probably because I wasn’t particularly skilled at it—but malware development has always intrigued me. I decided to give it a shot and see where it leads. Whether I succeed or stumble, I know it will be a valuable learning experience.
 
-This project wouldn't have been possible without the support of two friends (hi jord & bakki <3), so all the credit goes to them.
-From here on out, expect to see more malware development content, along with anything related to the amazing OS that is Windows.
-Without further ado, let’s dive into the topic of this blog post.
+I want to acknowledge the support of two friends, Jord and Bakki (kudos <3), without whom this project wouldn’t have been possible—huge thanks to both of them. Going forward, you can expect more content focused on malware development and related topics, especially within the Windows ecosystem. Without further ado, let’s dive into the topic of this blog post.
 
 --- 
 # Fundamental of Process Injection 
 
-Before anything else let's define the term we're going to focus on here, and MITRE has done a fantastic job for that so I'll quote them : 
-
-*Process injection is a method of executing arbitrary code in the address space of a separate live process. Running code in the context of another process may allow access to the process's memory, system/network resources, and possibly elevated privileges* from [MITRE](https://attack.mitre.org/techniques/T1055/)
+To understand this project, let’s first define the core concept: **Process Injection**.  
+  
+According to [MITRE](https://attack.mitre.org/techniques/T1055/) : Process injection is a method of executing arbitrary code in the address space of a separate live process. This technique can grant access to the target process’s memory, system/network resources, and potentially elevated privileges.' This definition perfectly encapsulates the technique used in this project
 
 --- 
 # Brief description of the project 
 
-As stated in the introduction, this project came to life thanks to a friend of mine as I've asked him if he had some ideas about a baby project I could do to get my feet wet with Malware Development.  
+As stated in the introduction, this project came to life thanks to a friend of mine as I’ve asked him if he had some ideas about a baby project I could do to get my feet wet with Malware Development.
 
-As shown below, this is what he came up with : 
-
-![targets](/images/idea.png)  
-Everything is already perfectly explained (thanks again <3) but the goal here is to write a small program that will execute a shellcode (a payload designed to execute code on a target host) into a remote process which will return a reverse shell on my local machine.   
-To accomplish this, we are going to use the C programming language.  
-
-We will talk a bit about this later but the shellcode will be encrypted using *Single-byte XOR* encryption which is a very basic AV evasion method. 
+This project began as a suggestion from a friend when I was seeking a simple yet practical way to start learning malware development. The goal was to create a small program capable of executing shellcode into a remote process, ultimately establishing a reverse shell connection to my local machine. For this, I used the C programming language and implemented a basic AV evasion technique using single-byte XOR encryption.
 
 --- 
 # OpenProcess, VirtualAllocEx, WriteProcessMemory and CreateRemoteThread APIs 
@@ -54,9 +46,7 @@ The **OpenProcess** function is used to open an existing process (using its PID 
 
 ## VirtualAllocEx
 
-**VirtualAllocEx** function is used to reserve, commit, or free a region of memory within the virtual address space of a specified process.  
-We will use this function to allocate memory for our shellcode.  
-(Note:  Here, *Ex* stands for **Extended**, which is an extended version of VirtualAlloc)
+The **VirtualAllocEx** function reserves, commits, or frees memory in the virtual address space of a specified process. For this project, it is used to allocate memory for the shellcode with read, write, and execute permissions (`PAGE_EXECUTE_READWRITE`).
 
 | Name             | Description                                                                                                                                               |
 | ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -115,9 +105,7 @@ For **lpStartAddress** we will use **LPTHREAD_START_ROUTINE** which indicates th
 );
 ```
 
-First, we create our handle to our process, here I chose *notepad.exe* denoted by a PID of 2468, you can choose anything you want (a cmd, another random application, ...). 
-**PROCESS_ALL_ACCESS** gives all possible access rights to our object.  
-
+In this step, we use OpenProcess to open a handle to the target process. For demonstration, I used **notepad.exe** with a PID of `2468`. However, this could be any process, such as cmd.exe or another application.
 ## 2. Basic AV Evasion (more on this later)
 
 ```c
@@ -128,7 +116,8 @@ for (int i = 0; i < sizeof(shellcode); i++)
 		shellcode[i] ^= key;
     }
 ```
-We will use a very basic antivirus evasion method here ; encrypting our shellcode using XOR.
+
+To evade antivirus detection, I implemented single-byte XOR encryption, a straightforward technique where each byte of the shellcode is XORed with a single key ('S' in this case). This obfuscates the shellcode, making it less recognizable to static analysis tools or antivirus software. The encrypted shellcode is then decrypted at runtime before execution.
 
 ## 3. Memory allocation for our shellcode
 
@@ -284,11 +273,9 @@ The difference is not that big but as we can see we lowered our score by 5, demo
 --- 
 # Conclusion  
 
-I aimed to demonstrate a simple yet powerful program that enabled us to achieve code execution on a target machine. I wrote this code in about 30 minutes while relearning C from scratch, since I had forgotten most of what I knew about this lovely language. So, please don't judge too harshly if my code has made you want to give up programming for good.
+This project demonstrated a simple yet effective method for achieving remote code execution on a target machine. While the implementation is basic, it highlights the core concepts of process injection and AV evasion. Developing this program also served as a hands-on way to relearn C programming. I look forward to exploring more advanced techniques in future projects.
 
-I hope you enjoyed following along as much as I enjoyed creating this. I'm excited to dive into even more fun projects in the wonderful piece of software that is Windows.  
-
-See you soon, and take care !
+See you soon and take care !
 
 ---
 
