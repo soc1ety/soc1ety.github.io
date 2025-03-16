@@ -2,7 +2,7 @@ baseURL = 'https://soc1ety.github.io'
 languageCode = 'en-us'
 title = 'cool blog'
 theme = 'archie'
-paginate = 4
+pagination.pagerSize = 4
 
 
 [params]
