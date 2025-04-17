@@ -1,7 +1,7 @@
 ---
-title: "First malware : Windows Remote Thread Injection"
+title: "Windows Remote Thread Injection"
 date: 2024-10-07
-description: "Basic method to inject shellcode into a remote process"
+description: "Basic method to inject a shellcode into a remote process"
 ---
 
 ---
