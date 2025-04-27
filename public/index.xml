@@ -2,24 +2,24 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>cool blog</title>
-    <link>http://localhost:1313/</link>
+    <link>https://kernelmodepls.tech/</link>
     <description>Recent content on cool blog</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 02 Jan 2025 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://kernelmodepls.tech/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>about me</title>
-      <link>http://localhost:1313/about/</link>
+      <link>https://kernelmodepls.tech/about/</link>
       <pubDate>Thu, 02 Jan 2025 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/about/</guid>
+      <guid>https://kernelmodepls.tech/about/</guid>
       <description>&lt;p&gt;Hey, society here. I&amp;rsquo;ve been in the security field for about 4 years now, I&amp;rsquo;m currently working part-time as a security engineer while developing my skills through various projects or stuff I find myself enjoying doing in my spare time.&lt;/p&gt;&#xA;&lt;p&gt;My heart belongs to red team funsies, more particularly to malware development and offensive tooling in general.&lt;/p&gt;&#xA;&lt;p&gt;I&amp;rsquo;m aiming to write more and share what I enjoy exploring, which is the purpose of this blog.&lt;/p&gt;</description>
     </item>
     <item>
-      <title>First malware : Windows Remote Thread Injection</title>
-      <link>http://localhost:1313/posts/remote-process-injection/</link>
+      <title>Windows Remote Thread Injection</title>
+      <link>https://kernelmodepls.tech/posts/remote-process-injection/</link>
       <pubDate>Mon, 07 Oct 2024 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/remote-process-injection/</guid>
+      <guid>https://kernelmodepls.tech/posts/remote-process-injection/</guid>
       <description>&lt;hr&gt;&#xA;&lt;h1 id=&#34;what--malware--no-more-pentesting--boring-backstory&#34;&gt;What ?? Malware ?? No more pentesting ?? (Boring backstory)&lt;/h1&gt;&#xA;&lt;p&gt;Well, sort of. Let me keep this brief. I began my cybersecurity journey in 2020, focusing on penetration testing, web application security, and participating in various Capture the Flag (CTF) challenges, primarily on HackTheBox. Over time, I found myself losing interest. Working on box after box felt repetitive, and I realized it was time to explore something new and more challenging.&lt;/p&gt;</description>
     </item>
   </channel>
